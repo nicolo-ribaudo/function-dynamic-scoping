@@ -2,6 +2,7 @@ import { unique } from "../unique.js";
 
 export const Fun = (...args) => Function(...args);
 export const Ev = str => (0, eval)(str);
+export const Timer = (...args) => setTimeout(...args);
 
 export async function runFromFolder() {
   const inlineFunction = Function(`${unique()};return import('./mod.js#5');`);
