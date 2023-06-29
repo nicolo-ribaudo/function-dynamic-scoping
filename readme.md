@@ -1,3 +1,5 @@
+Serve `index.html` and open it in your favorite browser. Note that due to CORS restrictions you need a local server, and you cannot simply open that file in the browser with a `file://` url.
+
 # Outputs
 
 Firefox:
