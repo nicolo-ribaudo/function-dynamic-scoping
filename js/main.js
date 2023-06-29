@@ -1,9 +1,5 @@
-import { Fun, Ev } from "./folder/function.js";
-
-// Make sure that all the creates functions have an unique source,
-// because v8 has a bytecode caching bug. Make this function return
-// a constant value to see the effect of the bug.
-const unique = () => Math.random();
+import { Fun, Ev, runFromFolder } from "./folder/function.js";
+import { unique } from "./unique.js";
 
 const inlineFunction = Function(`${unique()};return import('./mod.js');`);
 const { default: inlineFunctionRes } = await inlineFunction();
@@ -20,3 +16,5 @@ log(`Inline indirect eval loaded ${inlineIndirectEvalRes}`);
 const polyfilledIndirectEval = Ev(`${unique()};import('./mod.js');`);
 const { default: polyfilledIndirectEvalRes } = await polyfilledIndirectEval;
 log(`Polyfilled indirect eval loaded ${polyfilledIndirectEvalRes}`);
+
+await runFromFolder();
