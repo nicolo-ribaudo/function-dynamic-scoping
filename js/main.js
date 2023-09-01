@@ -1,34 +1,63 @@
-import { Fun, Ev, Timer, runFromFolder } from "./folder/function.js";
-import { unique } from "./unique.js";
+import {
+  FunctionW,
+  evalW,
+  setTimeoutW,
+  FunctionB,
+  evalB,
+  setTimeoutB,
+  runFromFolder,
+} from "./folder/function.js";
 
-const inlineFunction = Function(`${unique()};return import('./mod.js#1');`);
+const inlineFunction = Function(`return import('./mod.js#1');`);
 const { default: inlineFunctionRes } = await inlineFunction();
 log(`Inline function loaded ${inlineFunctionRes}`);
 
-const polyfilledFunction = Fun(`${unique()};return import('./mod.js#2');`);
-const { default: polyfilledFunctionRes } = await polyfilledFunction();
-log(`Polyfilled function loaded ${polyfilledFunctionRes}`);
+const wrappedFunction = FunctionW(`return import('./mod.js#2');`);
+const { default: wrappedFunctionRes } = await wrappedFunction();
+log(`Wrapped function loaded ${wrappedFunctionRes}`);
 
-const inlineIndirectEval = (0, eval)(`${unique()};import('./mod.js#3');`);
+const boundFunction = FunctionB(`return import('./mod.js#3');`);
+const { default: boundFunctionRes } = await boundFunction();
+log(`Bound function loaded ${boundFunctionRes}`);
+
+log("-".repeat(80));
+
+const inlineIndirectEval = (0, eval)(`import('./mod.js#4');`);
 const { default: inlineIndirectEvalRes } = await inlineIndirectEval;
 log(`Inline indirect eval loaded ${inlineIndirectEvalRes}`);
 
-const polyfilledIndirectEval = Ev(`${unique()};import('./mod.js#4');`);
-const { default: polyfilledIndirectEvalRes } = await polyfilledIndirectEval;
-log(`Polyfilled indirect eval loaded ${polyfilledIndirectEvalRes}`);
+const wrappedIndirectEval = evalW(`import('./mod.js#5');`);
+const { default: wrappedIndirectEvalRes } = await wrappedIndirectEval;
+log(`Wrapped indirect eval loaded ${wrappedIndirectEvalRes}`);
+
+const boundIndirectEval = evalB(`import('./mod.js#6');`);
+const { default: boundIndirectEvalRes } = await boundIndirectEval;
+log(`Bound indirect eval loaded ${boundIndirectEvalRes}`);
+
+
+log("-".repeat(80));
 
 await runFromFolder();
 
-const inlineSetTimeout = new Promise(resolve => {
-  setTimeout(`${unique()};setTimeoutCallback(import('./mod.js#5'));`, 0);
+log("-".repeat(80));
+
+const inlineSetTimeout = new Promise((resolve) => {
+  setTimeout(`setTimeoutCallback(import('./mod.js#7'));`, 0);
   globalThis.setTimeoutCallback = resolve;
-})
+});
 const { default: inlineSetTimeoutRes } = await inlineSetTimeout;
 log(`Inline setTimeout loaded ${inlineSetTimeoutRes}`);
 
-const polyfilledSetTimeout = new Promise(resolve => {
-  Timer(`${unique()};setTimeoutCallback(import('./mod.js#6'));`, 0);
+const wrappedSetTimeout = new Promise((resolve) => {
+  setTimeoutW(`setTimeoutCallback(import('./mod.js#8'));`, 0);
   globalThis.setTimeoutCallback = resolve;
-})
-const { default: polyfilledSetTimeoutRes } = await polyfilledSetTimeout;
-log(`Polyfilled setTimeout loaded ${polyfilledSetTimeoutRes}`);
+});
+const { default: wrappedSetTimeoutRes } = await wrappedSetTimeout;
+log(`Wrapped setTimeout loaded ${wrappedSetTimeoutRes}`);
+
+const bondSetTimeout = new Promise((resolve) => {
+  setTimeoutB(`setTimeoutCallback(import('./mod.js#9'));`, 0);
+  globalThis.setTimeoutCallback = resolve;
+});
+const { default: bondSetTimeoutRes } = await bondSetTimeout;
+log(`Bound setTimeout loaded ${bondSetTimeoutRes}`);
