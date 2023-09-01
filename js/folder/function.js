@@ -1,5 +1,3 @@
-import { unique } from "../unique.js";
-
 export const FunctionW = (...args) => Function(...args);
 export const evalW = str => (0, eval)(str);
 export const setTimeoutW = (...args) => setTimeout(...args);
