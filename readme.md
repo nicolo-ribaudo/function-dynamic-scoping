@@ -57,7 +57,7 @@ Bound setTimeout loaded /mod.js
 ```
 
 | Test case                        | Firefox | Safari | Chrome |
-|:--------------------------------:|:-------:|:------:|:------:|
+|:--------------------------------:|:--------|:-------|:-------|
 | Inline function                  | `/js/mod.js`        | `/js/mod.js`        | `/js/mod.js`        |
 | Wrapped function                 | `/js/folder/mod.js` | `/js/mod.js`        | `/js/folder/mod.js` |
 | Bound function                   | `/js/mod.js`        | `/js/mod.js`        | `/js/mod.js`        |
@@ -70,4 +70,9 @@ Bound setTimeout loaded /mod.js
 | Wrapped setTimeout               | `/js/folder/mod.js` | `/mod.js`           | `/mod.js`           |
 | Bound setTimeout                 | `/js/mod.js`        | `/mod.js`           | `/mod.js`           |
 
-**Note**: I do not understand how Safari can have different results for the "Wrapped" and "Inline in folder/" tests.
+# Notes
+- Firefox is implementing the spec
+- Chrome is implementing the spec for `Function` and `eval`, but not for `setTimeout`
+- I do not understand how Safari can have different results for the "Wrapped" and "Inline in folder/" tests.
+
+The behavior of `Function`/`eval`/`setTimeout` should not depend on where they are called from, so for each of the three evaluation functions all the rows in the table above should have the same result.
